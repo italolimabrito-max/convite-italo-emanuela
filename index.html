@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Convite de Casamento | Italo & Emanuela</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Floral/Natural Green (Sage/Olive) and Neutral Off-White -->
+    <!-- Application Structure Plan: A single-page, thematic scrolling website guiding guests through the wedding details. -->
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #FDFBF8; /* Off-White Background */
+            color: #4E584F; /* Dark Greenish-Gray Text */
+        }
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+            color: #4E584F; 
+        }
+        .hero-bg {
+            /* Placeholder adjusted to reflect Floral/Green theme (Clean, no text) */
+            background-image: url('https://placehold.co/1200x800/F0F3EF/F0F3EF?text= ');
+            background-size: cover;
+            background-position: center;
+        }
+        .timer-box {
+            background: rgba(247, 248, 247, 0.9);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(136, 163, 142, 0.4); /* Sage border */
+        }
+        .btn-primary {
+            background-color: #88A38E; /* Sage Green */
+            color: #FFFFFF;
+            transition: background-color 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #6D8572; /* Darker Sage Green for hover */
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="hero-bg w-full h-screen flex items-center justify-center text-center text-stone-800 p-4">
+        <div class="max-w-3xl mx-auto">
+            <p class="text-lg md:text-xl mb-4 text-[#4E584F]" style="letter-spacing: 0.2em;">VAMOS NOS CASAR!</p>
+            <h1 class="text-6xl md:text-8xl font-bold text-[#4E584F]">Italo & Emanuela</h1>
+            <div class="w-24 h-px bg-[#88A38E] mx-auto my-8 opacity-70"></div>
+            <p class="text-xl md:text-2xl text-[#4E584F]">27 de Dezembro de 2025</p>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-16 md:py-24 text-center">
+
+        <section id="intro" class="max-w-3xl mx-auto mb-16 md:mb-24">
+            <p class="text-lg leading-relaxed">
+                Com alegria em nossos corações e a certeza do amor que nos une, convidamos você, que é especial em nossas vidas, para celebrar a união de nossas almas e o início da nossa história.
+            </p>
+        </section>
+        
+        <section id="countdown" class="max-w-4xl mx-auto mb-16 md:mb-24">
+            <h2 class="text-4xl font-bold mb-8">Contagem Regressiva</h2>
+            <div id="timer" class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 text-[#4E584F]">
+                <div class="timer-box p-6 rounded-lg shadow-md">
+                    <span id="days" class="text-5xl font-bold">00</span>
+                    <p class="text-sm mt-2">Dias</p>
+                </div>
+                <div class="timer-box p-6 rounded-lg shadow-md">
+                    <span id="hours" class="text-5xl font-bold">00</span>
+                    <p class="text-sm mt-2">Horas</p>
+                </div>
+                <div class="timer-box p-6 rounded-lg shadow-md">
+                    <span id="minutes" class="text-5xl font-bold">00</span>
+                    <p class="text-sm mt-2">Minutos</p>
+                </div>
+                <div class="timer-box p-6 rounded-lg shadow-md">
+                    <span id="seconds" class="text-5xl font-bold">00</span>
+                    <p class="text-sm mt-2">Segundos</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="w-48 h-px bg-[#88A38E] mx-auto my-16 md:my-24 opacity-70"></div>
+
+        <section id="details" class="max-w-5xl mx-auto grid md:grid-cols-2 gap-12 md:gap-16 text-left">
+            <div class="bg-white/50 p-8 rounded-lg shadow-sm text-center">
+                <h3 class="text-3xl font-bold mb-6">Cerimônia</h3>
+                <p class="text-5xl mb-6 text-[#88A38E]">⛪</p>
+                <p class="text-lg font-semibold">Catedral Senhor do Bonfim</p>
+                <p class="text-md mb-2">BA-220, 6 - Centro, Sr. do Bonfim - BA, 48970-000</p>
+                <p class="text-md font-bold mb-2">Sábado, 27 de Dezembro de 2025, às 16:30</p>
+                <p class="text-sm mb-4 italic text-[#4E584F]">(Pedimos a gentileza de chegar 30 minutos antes.)</p>
+                <a href="https://maps.app.goo.gl/mAFm26ZM8T2Tx7oR7" target="_blank" class="text-[#88A38E] hover:text-[#6D8572] underline transition">Ver no mapa</a>
+            </div>
+            <div class="bg-white/50 p-8 rounded-lg shadow-sm text-center">
+                <h3 class="text-3xl font-bold mb-6">Recepção</h3>
+                <p class="text-5xl mb-6 text-[#88A38E]">🥂</p>
+                <p class="text-lg font-semibold">Rancho Mandacaru</p>
+                <p class="text-md mb-2">Entre na Trevo Pneus e siga em fente por 1.100 metros - R. Miguel Pinheiro, 1309 - Pebinhas, Sr. do Bonfim - BA, 48970-000</p>
+                <p class="text-md font-bold mb-4">Logo após a cerimônia</p>
+                 <a href="https://maps.app.goo.gl/3o2jJeG25GVnLK8H8" target="_blank" class="text-[#88A38E] hover:text-[#6D8572] underline transition">Ver no mapa</a>
+            </div>
+        </section>
+
+        <div class="w-48 h-px bg-[#88A38E] mx-auto my-16 md:my-24 opacity-70"></div>
+
+        <section id="manual" class="max-w-4xl mx-auto mb-16 md:mb-24">
+            <h2 class="text-4xl font-bold mb-12 text-center">Manual do Convidado</h2>
+            <div class="grid md:grid-cols-2 gap-x-12 gap-y-8 text-[#4E584F] text-left">
+                <!-- Item 1: Confirmação -->
+                <div class="flex items-start">
+                    <span class="text-2xl mr-4 mt-1 text-[#88A38E]">✔️</span>
+                    <div>
+                        <p class="font-semibold text-lg">Confirme sua Presença (RSVP)</p>
+                        <p class="text-sm text-[#4E584F]">Nos ajude a organizar a festa confirmando sua presença até **01 de Novembro de 2025**.</p>
+                    </div>
+                </div>
+                <!-- Item 2: Traje -->
+                <div class="flex items-start">
+                    <span class="text-2xl mr-4 mt-1 text-[#88A38E]">🤵👰</span>
+                    <div>
+                        <p class="font-semibold text-lg">Traje: Esporte Fino</p>
+                        <p class="text-sm text-[#4E584F]">Vista-se com elegância e conforto para a nossa celebração, mas sem exageros.</p>
+                    </div>
+                </div>
+                <!-- Item 3: Convite -->
+                <div class="flex items-start">
+                    <span class="text-2xl mr-4 mt-1 text-[#88A38E]">✉️</span>
+                    <div>
+                        <p class="font-semibold text-lg">Convidado Não Convida!</p>
+                        <p class="text-sm text-[#4E584F]">O convite é pessoal e intransferível, reservado às pessoas que amamos. Por favor, respeite a lista.</p>
+                    </div>
+                </div>
+                <!-- Item 4: Celular -->
+                <div class="flex items-start">
+                    <span class="text-2xl mr-4 mt-1 text-[#88A38E]">📵</span>
+                    <div>
+                        <p class="font-semibold text-lg">Celular no Silencioso</p>
+                        <p class="text-sm text-[#4E584F]">Queremos um momento especial e sem interrupções. Desligue ou silencie o aparelho na cerimônia.</p>
+                    </div>
+                </div>
+                <!-- Item 5: Doces -->
+                <div class="flex items-start">
+                    <span class="text-2xl mr-4 mt-1 text-[#88A38E]">🍰</span>
+                    <div>
+                        <p class="font-semibold text-lg">Mesa de Doces</p>
+                        <p class="text-sm text-[#4E584F]">Aguarde a liberação dos anfitriões ou cerimonial para apreciar a mesa de doces.</p>
+                    </div>
+                </div>
+                <!-- Item 6: Decoração -->
+                <div class="flex items-start">
+                    <span class="text-2xl mr-4 mt-1 text-[#88A38E]">🌸</span>
+                    <div>
+                        <p class="font-semibold text-lg">Decoração é da Festa</p>
+                        <p class="text-sm text-[#4E584F]">As flores e itens de decoração pertencem ao evento, não leve para casa.</p>
+                    </div>
+                </div>
+                <!-- Item 7: Fotógrafos -->
+                <div class="flex items-start">
+                    <span class="text-2xl mr-4 mt-1 text-[#88A38E]">📸</p>
+                    <div>
+                        <p class="font-semibold text-lg">Não Atrapalhe os Fotógrafos</p>
+                        <p class="text-sm text-[#4E584F]">Deixe os profissionais trabalharem. Eles garantirão fotos incríveis para todos depois!</p>
+                    </div>
+                </div>
+                <!-- Item 8: Despedida -->
+                <div class="flex items-start">
+                    <span class="text-2xl mr-4 mt-1 text-[#88A38E]">👋</span>
+                    <div>
+                        <p class="font-semibold text-lg">Despeça-se dos Noivos</p>
+                        <p class="text-sm text-[#4E584F]">Não saia sem dar um abraço e desejar felicidades a Italo e Emanuela!</p>
+                    </div>
+                </div>
+                <!-- Item 9: Aproveitar -->
+                <div class="flex items-start md:col-span-2">
+                    <span class="text-2xl mr-4 mt-1 text-[#88A38E]">🥳</span>
+                    <div>
+                        <p class="font-semibold text-lg">Aproveitar Bastante!</p>
+                        <p class="text-sm text-[#4E584F]">Este dia é feito para ser inesquecível! Dance, celebre e divirta-se sem moderação!</p>
+                    </div>
+                </div>
+                 <!-- Item 10: Cores Proibidas (Destaque) -->
+                <div class="flex items-start md:col-span-2 bg-red-50 p-4 rounded-lg border border-red-200 shadow-sm">
+                    <span class="text-3xl mr-4 mt-1">🚫</span>
+                    <div>
+                        <p class="font-bold text-red-800 text-xl">ATENÇÃO: Cor Exclusiva da Noiva</p>
+                        <p class="text-base text-[#4E584F]">Por favor, evite usar roupas na cor: **BRANCO**.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="w-48 h-px bg-[#88A38E] mx-auto my-16 md:my-24 opacity-70"></div>
+
+        <section id="social" class="max-w-3xl mx-auto mb-16 md:mb-24">
+            <h2 class="text-4xl font-bold mb-6">Compartilhe sua Foto!</h2>
+            <p class="text-5xl mb-6 text-[#88A38E]">📸</p>
+            <p class="text-lg leading-relaxed mb-6">
+                Amamos fotos! Se você registrar algum momento especial do nosso dia, não esqueça de nos marcar no Instagram para que possamos ver e guardar essa memória.
+            </p>
+            <div class="flex flex-col md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-8 text-xl font-semibold">
+                <a href="https://instagram.com/itallo.limaa" target="_blank" class="text-[#4E584F] hover:text-[#6D8572] transition">
+                    @itallo.limaa (Noivo)
+                </a>
+                <a href="https://instagram.com/manudias_04" target="_blank" class="text-[#4E584F] hover:text-[#6D8572] transition">
+                    @manudias_04 (Noiva)
+                </a>
+            </div>
+            <p class="mt-4 text-xl font-bold text-[#4E584F]">
+                E use a nossa hashtag: #EmanuelaEItalo2025
+            </p>
+        </section>
+
+        <div class="w-48 h-px bg-[#88A38E] mx-auto my-16 md:my-24 opacity-70"></div>
+
+        <section id="gifts" class="max-w-3xl mx-auto mb-16 md:mb-24">
+            <h2 class="text-4xl font-bold mb-6">Lista de Presentes</h2>
+            <p class="text-5xl mb-6 text-[#88A38E]">🎁</p>
+            <p class="text-lg leading-relaxed mb-6">
+                Sua presença é o nosso maior presente! Mas, se desejar nos presentear, ficaremos muito felizes. Criamos uma lista de presentes para facilitar.
+            </p>
+            <a href="https://noivos.casar.com/italo-e-emanuela" target="_blank" class="btn-primary py-3 px-8 rounded-full inline-block">Acessar a Lista</a>
+        </section>
+
+        <div class="w-48 h-px bg-[#88A38E] mx-auto my-16 md:my-24 opacity-70"></div>
+
+        <section id="rsvp" class="max-w-3xl mx-auto">
+            <h2 class="text-4xl font-bold mb-6">Confirme sua Presença</h2>
+            <p class="text-lg leading-relaxed mb-8">
+                Por favor, confirme sua presença até o dia **01 de Novembro de 2025** para que possamos organizar tudo com carinho.
+            </p>
+            <button id="rsvpButton" class="btn-primary py-3 px-8 rounded-full">CONFIRMAR PRESENÇA</button>
+            <div id="rsvpDetails" class="hidden mt-6 bg-[#F0F3EF] border-l-4 border-[#88A38E] text-[#4E584F] p-4" role="alert">
+                <p class="font-bold">Como confirmar:</p>
+                <p>Você pode confirmar diretamente enviando uma mensagem de WhatsApp.</p>
+                <a href="https://wa.me/5571982098017" target="_blank" class="font-bold underline hover:text-[#6D8572]">Enviar RSVP pelo WhatsApp (71) 98209-8017</a>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="text-center py-10 bg-[#F0F3EF] mt-16 md:mt-24">
+        <p class="font-bold text-2xl text-[#4E584F]" style="font-family: 'Playfair Display', serif;">#EmanuelaEItalo2025</p>
+        <p class="text-[#88A38E] mt-2">Feito com amor, para o nosso grande dia.</p>
+    </footer>
+
+    <script>
+        const countdown = () => {
+            const weddingDate = new Date('December 27, 2025 16:30:00').getTime();
+            const now = new Date().getTime();
+            const difference = weddingDate - now;
+
+            if (difference < 0) {
+                document.getElementById('timer').innerHTML = '<p class="col-span-2 md:col-span-4 text-2xl font-bold">O grande dia chegou!</p>';
+                clearInterval(interval);
+                return;
+            }
+
+            const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+            document.getElementById('days').innerText = String(days).padStart(2, '0');
+            document.getElementById('hours').innerText = String(hours).padStart(2, '0');
+            document.getElementById('minutes').innerText = String(minutes).padStart(2, '0');
+            document.getElementById('seconds').innerText = String(seconds).padStart(2, '0');
+        };
+
+        const interval = setInterval(countdown, 1000);
+        countdown();
+
+        const rsvpButton = document.getElementById('rsvpButton');
+        const rsvpDetails = document.getElementById('rsvpDetails');
+
+        rsvpButton.addEventListener('click', () => {
+            rsvpDetails.classList.toggle('hidden');
+            rsvpButton.textContent = rsvpDetails.classList.contains('hidden') ? 'CONFIRMAR PRESENÇA' : 'Fechar Detalhes';
+        });
+
+    </script>
+
