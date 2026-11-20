@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agenda de Demandas</title>
+<meta name="theme-color" content="#4f46e5">
+<style>
+:root{
+  --bg:#f5f6fa; --surface:#fff; --surface-2:#f0f1f6; --text:#1c1f2a; --muted:#6b7080;
+  --border:#e2e4ec; --primary:#4f46e5; --primary-text:#fff; --danger:#dc2626;
+  --p-alta:#dc2626; --p-media:#d97706; --p-baixa:#16a34a;
+  --s-pendente:#64748b; --s-andamento:#2563eb; --s-concluida:#16a34a; --s-cancelada:#9ca3af;
+  --shadow:0 1px 2px rgba(0,0,0,.05),0 4px 14px rgba(0,0,0,.05);
+  --radius:12px;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0f1117; --surface:#181b24; --surface-2:#222632; --text:#e7e9f0; --muted:#9097a8;
+    --border:#2c313f; --primary:#818cf8; --primary-text:#0f1117; --shadow:none;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0f1117; --surface:#181b24; --surface-2:#222632; --text:#e7e9f0; --muted:#9097a8;
+  --border:#2c313f; --primary:#818cf8; --primary-text:#0f1117; --shadow:none;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--text);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+button,input,select,textarea{font:inherit;color:inherit}
+header{position:sticky;top:0;z-index:5;background:var(--surface);border-bottom:1px solid var(--border)}
+.bar{max-width:1100px;margin:0 auto;padding:12px 16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.bar h1{font-size:18px;margin:0;flex:1;min-width:160px}
+.tabs{display:flex;gap:4px;background:var(--surface-2);padding:4px;border-radius:10px}
+.tabs button{border:0;background:transparent;padding:6px 12px;border-radius:7px;cursor:pointer;color:var(--muted)}
+.tabs button[aria-selected="true"]{background:var(--surface);color:var(--text);box-shadow:var(--shadow);font-weight:600}
+.btn{border:1px solid var(--border);background:var(--surface);padding:8px 14px;border-radius:9px;cursor:pointer}
+.btn:hover{background:var(--surface-2)}
+.btn.primary{background:var(--primary);border-color:var(--primary);color:var(--primary-text);font-weight:600}
+.btn.primary:hover{filter:brightness(1.08)}
+.btn.danger{color:var(--danger)}
+.btn.icon{padding:6px 10px}
+main{max-width:1100px;margin:0 auto;padding:16px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px}
+.stat b{display:block;font-size:22px}
+.stat span{color:var(--muted);font-size:13px}
+.stat.late b{color:var(--danger)}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.filters input,.filters select{background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:8px 10px}
+.filters input[type=search]{flex:1;min-width:180px}
+.group{margin-bottom:18px}
+.group h2{font-size:13px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);margin:0 0 8px}
+.group h2.late{color:var(--danger)}
+.card{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--s-pendente);border-radius:var(--radius);padding:12px 14px;margin-bottom:8px;display:flex;gap:12px;align-items:flex-start;cursor:pointer;box-shadow:var(--shadow)}
+.card:hover{border-color:var(--primary)}
+.card.p-alta{border-left-color:var(--p-alta)}
+.card.p-media{border-left-color:var(--p-media)}
+.card.p-baixa{border-left-color:var(--p-baixa)}
+.card.done{opacity:.6}
+.card.done .title{text-decoration:line-through}
+.check{width:22px;height:22px;flex:none;margin-top:1px;border-radius:50%;border:2px solid var(--border);background:transparent;cursor:pointer;display:grid;place-items:center;padding:0}
+.check.on{background:var(--s-concluida);border-color:var(--s-concluida);color:#fff}
+.card .body{flex:1;min-width:0}
+.title{font-weight:600;word-break:break-word}
+.meta{display:flex;gap:6px 12px;flex-wrap:wrap;color:var(--muted);font-size:13px;margin-top:3px}
+.desc{color:var(--muted);font-size:13px;margin-top:4px;white-space:pre-wrap;word-break:break-word;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.pill{display:inline-block;font-size:12px;padding:1px 8px;border-radius:99px;background:var(--surface-2);color:var(--text)}
+.pill.s-andamento{background:color-mix(in srgb,var(--s-andamento) 18%,transparent);color:var(--s-andamento)}
+.pill.s-concluida{background:color-mix(in srgb,var(--s-concluida) 18%,transparent);color:var(--s-concluida)}
+.pill.s-cancelada{background:color-mix(in srgb,var(--s-cancelada) 22%,transparent)}
+.pill.late{background:color-mix(in srgb,var(--danger) 15%,transparent);color:var(--danger)}
+.empty{text-align:center;color:var(--muted);padding:48px 16px;background:var(--surface);border:1px dashed var(--border);border-radius:var(--radius)}
+/* calendário */
+.cal-head{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.cal-head h2{flex:1;margin:0;font-size:18px}
+.cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.cal .dow{font-size:12px;color:var(--muted);text-align:center;padding:4px 0}
+.day{background:var(--surface);border:1px solid var(--border);border-radius:8px;min-height:92px;padding:4px;cursor:pointer;overflow:hidden;display:flex;flex-direction:column;gap:2px}
+.day:hover{border-color:var(--primary)}
+.day.other{opacity:.45}
+.day.today .num{background:var(--primary);color:var(--primary-text);border-radius:99px}
+.day.sel{outline:2px solid var(--primary)}
+.num{font-size:12px;font-weight:600;width:22px;height:22px;display:grid;place-items:center}
+.ev{font-size:11px;padding:1px 5px;border-radius:4px;background:var(--surface-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border-left:3px solid var(--s-pendente)}
+.ev.p-alta{border-left-color:var(--p-alta)} .ev.p-media{border-left-color:var(--p-media)} .ev.p-baixa{border-left-color:var(--p-baixa)}
+.ev.done{text-decoration:line-through;opacity:.6}
+.more{font-size:11px;color:var(--muted);padding-left:4px}
+.dots{display:none}
+#dayList{margin-top:16px}
+/* modal */
+dialog{border:0;border-radius:16px;padding:0;width:min(560px,calc(100vw - 32px));background:var(--surface);color:var(--text);box-shadow:0 20px 60px rgba(0,0,0,.3)}
+dialog::backdrop{background:rgba(0,0,0,.45)}
+form.m{padding:18px}
+form.m h3{margin:0 0 14px;font-size:18px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.full{grid-column:1/-1}
+label{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted)}
+label input,label select,label textarea{background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:9px 10px;color:var(--text);font-size:15px}
+label textarea{min-height:80px;resize:vertical}
+.actions{display:flex;gap:8px;justify-content:flex-end;margin-top:16px;flex-wrap:wrap}
+.actions .spacer{flex:1}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--text);color:var(--bg);padding:10px 16px;border-radius:10px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s}
+.toast.show{opacity:1}
+.fab{display:none}
+@media (max-width:700px){
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .grid{grid-template-columns:1fr}
+  .day{min-height:54px}
+  .day .ev,.day .more{display:none}
+  .day .dots{display:flex;gap:2px;flex-wrap:wrap;padding:0 2px}
+  .dots i{width:6px;height:6px;border-radius:50%;background:var(--primary)}
+  #btnNew{display:none}
+  .bar h1{font-size:16px;min-width:0}
+  .filters select{flex:1 1 40%}
+  .filters input[type=search]{flex-basis:100%}
+  .fab{display:grid;place-items:center;position:fixed;right:16px;bottom:16px;width:56px;height:56px;border-radius:50%;border:0;background:var(--primary);color:var(--primary-text);font-size:28px;box-shadow:0 6px 20px rgba(0,0,0,.25);cursor:pointer;z-index:6}
+  main{padding-bottom:90px}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="bar">
+    <h1>📋 Agenda de Demandas</h1>
+    <div class="tabs" role="tablist">
+      <button role="tab" data-view="lista" aria-selected="true">Lista</button>
+      <button role="tab" data-view="calendario" aria-selected="false">Calendário</button>
+    </div>
+    <button class="btn icon" id="btnMenu" title="Backup / tema">⋯</button>
+    <button class="btn primary" id="btnNew">+ Nova demanda</button>
+  </div>
+</header>
+
+<main>
+  <section class="stats" id="stats"></section>
+
+  <section class="filters">
+    <input type="search" id="fSearch" placeholder="Buscar por título, cliente, responsável…">
+    <select id="fStatus">
+      <option value="abertas">Em aberto</option>
+      <option value="">Todos os status</option>
+      <option value="pendente">Pendente</option>
+      <option value="andamento">Em andamento</option>
+      <option value="concluida">Concluída</option>
+      <option value="cancelada">Cancelada</option>
+    </select>
+    <select id="fPrio">
+      <option value="">Todas as prioridades</option>
+      <option value="alta">Alta</option>
+      <option value="media">Média</option>
+      <option value="baixa">Baixa</option>
+    </select>
+    <select id="fResp"><option value="">Todos os responsáveis</option></select>
+  </section>
+
+  <section id="viewLista"></section>
+  <section id="viewCalendario" hidden>
+    <div class="cal-head">
+      <button class="btn icon" id="calPrev" aria-label="Mês anterior">‹</button>
+      <h2 id="calTitle"></h2>
+      <button class="btn" id="calToday">Hoje</button>
+      <button class="btn icon" id="calNext" aria-label="Próximo mês">›</button>
+    </div>
+    <div class="cal" id="cal"></div>
+    <div id="dayList"></div>
+  </section>
+</main>
+
+<button class="fab" id="fab" aria-label="Nova demanda">+</button>
+
+<dialog id="dlg">
+  <form class="m" id="frm" method="dialog">
+    <h3 id="dlgTitle">Nova demanda</h3>
+    <div class="grid">
+      <label class="full">Título *<input name="titulo" required maxlength="140" placeholder="Ex.: Revisar contrato do cliente X"></label>
+      <label>Data *<input type="date" name="data" required></label>
+      <label>Horário<input type="time" name="hora"></label>
+      <label>Cliente / Solicitante<input name="cliente" maxlength="80"></label>
+      <label>Responsável<input name="responsavel" maxlength="80" list="respList"></label>
+      <label>Prioridade
+        <select name="prioridade">
+          <option value="baixa">Baixa</option>
+          <option value="media" selected>Média</option>
+          <option value="alta">Alta</option>
+        </select>
+      </label>
+      <label>Status
+        <select name="status">
+          <option value="pendente">Pendente</option>
+          <option value="andamento">Em andamento</option>
+          <option value="concluida">Concluída</option>
+          <option value="cancelada">Cancelada</option>
+        </select>
+      </label>
+      <label class="full">Descrição<textarea name="descricao" maxlength="2000" placeholder="Detalhes, links, observações…"></textarea></label>
+    </div>
+    <datalist id="respList"></datalist>
+    <div class="actions">
+      <button type="button" class="btn danger" id="btnDelete" hidden>Excluir</button>
+      <span class="spacer"></span>
+      <button type="button" class="btn" id="btnCancel">Cancelar</button>
+      <button type="submit" class="btn primary">Salvar</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="dlgMenu">
+  <form class="m" method="dialog">
+    <h3>Opções</h3>
+    <div class="actions" style="justify-content:flex-start;margin-top:0">
+      <button type="button" class="btn" id="btnExport">⬇ Exportar backup (JSON)</button>
+      <button type="button" class="btn" id="btnImport">⬆ Importar backup</button>
+      <button type="button" class="btn" id="btnTheme">🌓 Alternar tema</button>
+    </div>
+    <p style="color:var(--muted);font-size:13px">Os dados ficam salvos neste navegador. Use o backup para levar para outro aparelho.</p>
+    <input type="file" id="fileImport" accept="application/json" hidden>
+    <div class="actions"><button class="btn">Fechar</button></div>
+  </form>
+</dialog>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(() => {
+  const KEY = 'agenda-demandas:v1';
+  const THEME_KEY = 'agenda-demandas:tema';
+  const $ = s => document.querySelector(s);
+  const STATUS = {pendente:'Pendente', andamento:'Em andamento', concluida:'Concluída', cancelada:'Cancelada'};
+  const PRIO = {alta:'Alta', media:'Média', baixa:'Baixa'};
+  const PRIO_ORD = {alta:0, media:1, baixa:2};
+
+  // ---------- armazenamento ----------
+  function load(){ try { return JSON.parse(localStorage.getItem(KEY)) || []; } catch { return []; } }
+  function save(){ try { localStorage.setItem(KEY, JSON.stringify(items)); } catch { toast('Não foi possível salvar no navegador'); } }
+  let items = load();
+
+  // ---------- datas ----------
+  const pad = n => String(n).padStart(2,'0');
+  const iso = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+  const today = () => iso(new Date());
+  const parse = s => { const [y,m,d] = s.split('-').map(Number); return new Date(y, m-1, d); };
+  const addDays = (s, n) => { const d = parse(s); d.setDate(d.getDate()+n); return iso(d); };
+  const fmtDate = s => parse(s).toLocaleDateString('pt-BR', {weekday:'short', day:'2-digit', month:'short'});
+  const isOpen = it => it.status === 'pendente' || it.status === 'andamento';
+  const isLate = it => isOpen(it) && (it.data < today() || (it.data === today() && it.hora && it.hora < new Date().toTimeString().slice(0,5)));
+
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const uid = () => (crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36)+Math.random().toString(36).slice(2));
+
+  const sortFn = (a,b) => a.data.localeCompare(b.data) || (a.hora||'99').localeCompare(b.hora||'99') || PRIO_ORD[a.prioridade]-PRIO_ORD[b.prioridade];
+
+  // ---------- estado de UI ----------
+  let view = 'lista';
+  const now = new Date();
+  let calY = now.getFullYear(), calM = now.getMonth(), calSel = today();
+
+  function filtered(){
+    const q = $('#fSearch').value.trim().toLowerCase();
+    const st = $('#fStatus').value, pr = $('#fPrio').value, rp = $('#fResp').value;
+    return items.filter(it => {
+      if (st === 'abertas' ? !isOpen(it) : (st && it.status !== st)) return false;
+      if (pr && it.prioridade !== pr) return false;
+      if (rp && (it.responsavel||'') !== rp) return false;
+      if (q && ![it.titulo, it.cliente, it.responsavel, it.descricao].join(' ').toLowerCase().includes(q)) return false;
+      return true;
+    }).sort(sortFn);
+  }
+
+  // ---------- render ----------
+  function renderStats(){
+    const t = today(), wEnd = addDays(t, 7);
+    const open = items.filter(isOpen);
+    const s = [
+      ['Hoje', open.filter(i => i.data === t).length, ''],
+      ['Próximos 7 dias', open.filter(i => i.data > t && i.data <= wEnd).length, ''],
+      ['Atrasadas', open.filter(isLate).length, 'late'],
+      ['Concluídas', items.filter(i => i.status === 'concluida').length, ''],
+    ];
+    $('#stats').innerHTML = s.map(([l,n,c]) => `<div class="stat ${c}"><b>${n}</b><span>${l}</span></div>`).join('');
+  }
+
+  function renderResp(){
+    const names = [...new Set(items.map(i => i.responsavel).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'pt-BR'));
+    const sel = $('#fResp'), cur = sel.value;
+    sel.innerHTML = '<option value="">Todos os responsáveis</option>' + names.map(n => `<option>${esc(n)}</option>`).join('');
+    sel.value = names.includes(cur) ? cur : '';
+    $('#respList').innerHTML = names.map(n => `<option value="${esc(n)}">`).join('');
+  }
+
+  function card(it){
+    const late = isLate(it), done = it.status === 'concluida' || it.status === 'cancelada';
+    return `<article class="card p-${it.prioridade} ${done?'done':''}" data-id="${it.id}">
+      <button class="check ${it.status==='concluida'?'on':''}" data-toggle="${it.id}" title="Marcar como concluída" aria-label="Concluir">${it.status==='concluida'?'✓':''}</button>
+      <div class="body">
+        <div class="title">${esc(it.titulo)}</div>
+        <div class="meta">
+          <span>📅 ${fmtDate(it.data)}${it.hora ? ' · '+it.hora : ''}</span>
+          ${it.cliente ? `<span>👤 ${esc(it.cliente)}</span>` : ''}
+          ${it.responsavel ? `<span>🧑‍💼 ${esc(it.responsavel)}</span>` : ''}
+          <span class="pill s-${it.status}">${STATUS[it.status]}</span>
+          <span class="pill">${PRIO[it.prioridade]}</span>
+          ${late ? '<span class="pill late">Atrasada</span>' : ''}
+        </div>
+        ${it.descricao ? `<div class="desc">${esc(it.descricao)}</div>` : ''}
+      </div>
+    </article>`;
+  }
+
+  function renderLista(){
+    const list = filtered();
+    if (!list.length){
+      $('#viewLista').innerHTML = `<div class="empty">${items.length ? 'Nenhuma demanda com esses filtros.' : 'Nenhuma demanda ainda.<br><br><button class="btn primary" data-new>+ Criar a primeira</button>'}</div>`;
+      return;
+    }
+    const t = today(), tm = addDays(t,1), wEnd = addDays(t,7);
+    const groups = [['Atrasadas',[],'late'],['Hoje',[]],['Amanhã',[]],['Próximos 7 dias',[]],['Mais adiante',[]],['Anteriores',[]]];
+    for (const it of list){
+      if (isLate(it)) groups[0][1].push(it);
+      else if (it.data === t) groups[1][1].push(it);
+      else if (it.data === tm) groups[2][1].push(it);
+      else if (it.data > tm && it.data <= wEnd) groups[3][1].push(it);
+      else if (it.data > wEnd) groups[4][1].push(it);
+      else groups[5][1].push(it);
+    }
+    groups[5][1].reverse();
+    $('#viewLista').innerHTML = groups.filter(g => g[1].length).map(([n,arr,c]) =>
+      `<div class="group"><h2 class="${c||''}">${n} · ${arr.length}</h2>${arr.map(card).join('')}</div>`).join('');
+  }
+
+  function renderCal(){
+    const first = new Date(calY, calM, 1);
+    const mt = first.toLocaleDateString('pt-BR', {month:'long', year:'numeric'});
+    $('#calTitle').textContent = mt.charAt(0).toUpperCase() + mt.slice(1);
+    const start = new Date(first); start.setDate(1 - first.getDay());
+    const list = filtered(), byDay = {};
+    for (const it of list) (byDay[it.data] ||= []).push(it);
+    const t = today();
+    let html = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'].map(d => `<div class="dow">${d}</div>`).join('');
+    for (let i = 0; i < 42; i++){
+      const d = new Date(start); d.setDate(start.getDate()+i);
+      const k = iso(d), evs = byDay[k] || [];
+      html += `<div class="day ${d.getMonth()!==calM?'other':''} ${k===t?'today':''} ${k===calSel?'sel':''}" data-day="${k}">
+        <span class="num">${d.getDate()}</span>
+        ${evs.slice(0,3).map(e => `<div class="ev p-${e.prioridade} ${isOpen(e)?'':'done'}" title="${esc(e.titulo)}">${e.hora?e.hora+' ':''}${esc(e.titulo)}</div>`).join('')}
+        ${evs.length>3 ? `<div class="more">+${evs.length-3} mais</div>` : ''}
+        <div class="dots">${evs.slice(0,5).map(()=>'<i></i>').join('')}</div>
+      </div>`;
+      if (i === 34 && d.getMonth() !== calM) break;
+    }
+    $('#cal').innerHTML = html;
+    const sel = byDay[calSel] || [];
+    $('#dayList').innerHTML = `<div class="group"><h2>${fmtDate(calSel)} · ${sel.length}</h2>${sel.length ? sel.map(card).join('') : `<div class="empty">Nada agendado neste dia. <br><br><button class="btn primary" data-new="${calSel}">+ Agendar aqui</button></div>`}</div>`;
+  }
+
+  function render(){
+    renderStats(); renderResp();
+    $('#viewLista').hidden = view !== 'lista';
+    $('#viewCalendario').hidden = view !== 'calendario';
+    view === 'lista' ? renderLista() : renderCal();
+  }
+
+  // ---------- modal ----------
+  const dlg = $('#dlg'), frm = $('#frm');
+  let editing = null;
+  function openForm(it, date){
+    editing = it ? it.id : null;
+    frm.reset();
+    $('#dlgTitle').textContent = it ? 'Editar demanda' : 'Nova demanda';
+    $('#btnDelete').hidden = !it;
+    const v = it || {data: date || (view==='calendario' ? calSel : today()), prioridade:'media', status:'pendente'};
+    for (const el of frm.elements) if (el.name) el.value = v[el.name] ?? '';
+    dlg.showModal();
+    setTimeout(() => frm.titulo.focus(), 30);
+  }
+  frm.addEventListener('submit', e => {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(frm));
+    data.titulo = data.titulo.trim();
+    if (!data.titulo) return;
+    if (editing){
+      const it = items.find(i => i.id === editing);
+      Object.assign(it, data, {atualizadoEm: new Date().toISOString()});
+      toast('Demanda atualizada');
+    } else {
+      items.push({id: uid(), ...data, criadoEm: new Date().toISOString()});
+      toast('Demanda agendada');
+    }
+    save(); dlg.close(); render();
+  });
+  $('#btnCancel').onclick = () => dlg.close();
+  $('#btnDelete').onclick = () => {
+    if (!confirm('Excluir esta demanda?')) return;
+    items = items.filter(i => i.id !== editing);
+    save(); dlg.close(); render(); toast('Demanda excluída');
+  };
+
+  // ---------- eventos ----------
+  document.addEventListener('click', e => {
+    const tg = e.target.closest('[data-toggle]');
+    if (tg){
+      e.stopPropagation();
+      const it = items.find(i => i.id === tg.dataset.toggle);
+      it.status = it.status === 'concluida' ? 'pendente' : 'concluida';
+      it.atualizadoEm = new Date().toISOString();
+      save(); render();
+      toast(it.status === 'concluida' ? 'Concluída ✓' : 'Reaberta');
+      return;
+    }
+    const nw = e.target.closest('[data-new]');
+    if (nw) return openForm(null, nw.dataset.new || undefined);
+    const c = e.target.closest('.card');
+    if (c) return openForm(items.find(i => i.id === c.dataset.id));
+    const d = e.target.closest('[data-day]');
+    if (d){
+      calSel = d.dataset.day;
+      const dd = parse(calSel);
+      if (dd.getMonth() !== calM){ calY = dd.getFullYear(); calM = dd.getMonth(); }
+      renderCal();
+    }
+  });
+  document.querySelectorAll('.tabs button').forEach(b => b.onclick = () => {
+    view = b.dataset.view;
+    document.querySelectorAll('.tabs button').forEach(x => x.setAttribute('aria-selected', x === b));
+    render();
+  });
+  ['#fSearch','#fStatus','#fPrio','#fResp'].forEach(s => $(s).addEventListener('input', render));
+  $('#btnNew').onclick = $('#fab').onclick = () => openForm();
+  $('#calPrev').onclick = () => { if (--calM < 0){ calM = 11; calY--; } renderCal(); };
+  $('#calNext').onclick = () => { if (++calM > 11){ calM = 0; calY++; } renderCal(); };
+  $('#calToday').onclick = () => { const n = new Date(); calY = n.getFullYear(); calM = n.getMonth(); calSel = today(); renderCal(); };
+
+  // ---------- menu: backup e tema ----------
+  $('#btnMenu').onclick = () => $('#dlgMenu').showModal();
+  $('#btnExport').onclick = () => {
+    const blob = new Blob([JSON.stringify(items, null, 2)], {type:'application/json'});
+    const a = Object.assign(document.createElement('a'), {href: URL.createObjectURL(blob), download: `demandas-${today()}.json`});
+    a.click(); URL.revokeObjectURL(a.href);
+  };
+  $('#btnImport').onclick = () => $('#fileImport').click();
+  $('#fileImport').onchange = async e => {
+    const f = e.target.files[0]; if (!f) return;
+    try {
+      const data = JSON.parse(await f.text());
+      if (!Array.isArray(data)) throw 0;
+      const valid = data.filter(d => d && d.titulo && /^\d{4}-\d{2}-\d{2}$/.test(d.data)).map(d => ({
+        id: d.id || uid(), titulo: String(d.titulo), data: d.data, hora: d.hora || '',
+        cliente: d.cliente || '', responsavel: d.responsavel || '', descricao: d.descricao || '',
+        prioridade: PRIO[d.prioridade] ? d.prioridade : 'media', status: STATUS[d.status] ? d.status : 'pendente',
+        criadoEm: d.criadoEm, atualizadoEm: d.atualizadoEm }));
+      const ids = new Set(items.map(i => i.id));
+      const novos = valid.filter(v => !ids.has(v.id));
+      items.push(...novos); save(); render();
+      $('#dlgMenu').close(); toast(`${novos.length} demanda(s) importada(s)`);
+    } catch { toast('Arquivo inválido'); }
+    e.target.value = '';
+  };
+  function applyTheme(t){ if (t) document.documentElement.dataset.theme = t; else delete document.documentElement.dataset.theme; }
+  try { applyTheme(localStorage.getItem(THEME_KEY)); } catch {}
+  $('#btnTheme').onclick = () => {
+    const dark = document.documentElement.dataset.theme ? document.documentElement.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+    const t = dark ? 'light' : 'dark';
+    applyTheme(t); try { localStorage.setItem(THEME_KEY, t); } catch {}
+  };
+
+  let tt;
+  function toast(msg){ const el = $('#toast'); el.textContent = msg; el.classList.add('show'); clearTimeout(tt); tt = setTimeout(() => el.classList.remove('show'), 2000); }
+
+  // atualiza "atrasadas" a cada minuto
+  setInterval(render, 60000);
+  render();
+})();
+</script>
+</body>
+</html>
